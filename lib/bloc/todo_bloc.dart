@@ -16,18 +16,22 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
      });
 
      on<GetTodo>((event, emit) async {
-        final todo = _repository.getTodoByTitle(event.title);
+        emit(TodoLoading());
+        final todo = await _repository.getTodoByTitle(event.title);
         emit(TodoLoaded(todo));
      });
 
      on<AddTodo>((event, emit) async {
-        _repository.addTodo(event.todolist);
+         emit(TodoLoading());
+      await  _repository.addTodo(event.todolist);
         emit(TodosLoaded(_repository.getTodos()));
      });
 
      on<AddList>((event, emit) async {
-        _repository.addList(event.list, event.title);
-        final todo = _repository.getTodoByTitle(event.title);
+       //add loading 
+         emit(TodoLoading());
+       await _repository.addList(event.list, event.title);
+        final todo = await _repository.getTodoByTitle(event.title);
         emit(TodoLoaded(todo));
      });
 
